@@ -86,6 +86,7 @@ class scheduler_helper {
     }
 
     sendForms = () => {
+        console.log('Send Forms!');
         this.readSettings(this.settings_workSheet).then((ws) => {
             var workS = ws[0];
             this.client.channels.get(this.setting.Announcement_Channel_ID).send(this.siegeMember + ' Forms for the week have been updated on ' + workS.updated + ', and here they are! \n' + workS.g_forms_link);
@@ -123,6 +124,7 @@ class scheduler_helper {
     }
 
     scheduler = (settings) => {
+        console.log('setting up schedulers!');
         this.init(settings).then(() => {
             this.db_helper.schedule_all_rows(this.setting.ID).then((sRows) => {
                 sRows.forEach((sRow) => {
@@ -153,8 +155,6 @@ class scheduler_helper {
 
 
     getDiscordGuildies = (discordGuildMembers, completed) => {
-
-        console.log('List of completed from Sheet', completed);
         var discordCompletedMembers = completed.map((complete) => {
             var filterRes = discordGuildMembers.filter(
                 (member) => {
@@ -231,7 +231,7 @@ class scheduler_helper {
 
 
     get_non_attendance = (msg) => {
-
+        console.log('Get Non Attendance!');
         this.getGoogleSheet(msg).then((completed) => {
             var discordGuildMembers = this.client.guilds.get(this.setting.guild_Discord_ID).roles.find("id", this.setting.Event_Role_ID).members;
 
@@ -254,8 +254,6 @@ class scheduler_helper {
                 var spamMessage = 'Thank you for filling RSVP ' + workS.updated + ' for the week!\n' +
                     'Please be reminded to set your vacation status to [Yes] before siege!' + '\n' + spammer +
                     '\nAny issues please inform ' + this.me;
-
-                console.log('Message : ' + spamMessage);
 
                 if (msg) {
                     msg.delete(this.delay);
@@ -293,7 +291,6 @@ class scheduler_helper {
 
             var spamMessage = 'Unfortunately the below list of members have yet to fill RSVP!' + '\n' + spammer;
 
-            console.log('Message : ' + spamMessage);
             msg.delete(this.delay);
             msg.author.send(spamMessage);
         })
@@ -302,6 +299,7 @@ class scheduler_helper {
 
 
     get_attendance = (msg, control) => {
+        console.log('Get Attendance!');
         this.getGoogleSheet(msg).then((completed) => {
             var discordGuildMembers = this.client.guilds.get(this.setting.guild_Discord_ID).roles.find("id", this.setting.Event_Role_ID).members;
 
@@ -334,8 +332,6 @@ class scheduler_helper {
                         spammer + '\nIf you have already filled the form but still see your name here inform ' + this.me :
                         'Please fill up the document/s prepared on ' + workS.updated + ' for the week!\n' +
                         workS.g_forms_link + '\n' + spammer + '\nIf you have already filled the document but still see your name here inform ' + this.me;
-
-                console.log('Message : ' + spamMessage);
 
                 if (msg) {
                     msg.delete(1000);
