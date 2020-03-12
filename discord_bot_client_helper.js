@@ -42,7 +42,7 @@ class scheduler_helper {
             this.setting = settings;
 
             this.siegeMember = "<@&" + settings.Event_Role_ID + ">";
-            this.me = "<@" + settings.Developer_ID + ">";
+            this.me = "<@&" + settings.Developer_ID + ">";
             this.client = settings.dis_client;
 
 
