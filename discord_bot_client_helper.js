@@ -73,7 +73,7 @@ class scheduler_helper {
         }
         var saturdayString = dd + '/' + mm + '/' + yyyy;
         console.log(saturdayString);
-        
+
         return 'Siege' + saturdayString;
     }
 
@@ -212,7 +212,7 @@ class scheduler_helper {
 
             this.readSettings(
                 //this.event_google_sheet
-                'Siege 18/4/2020'
+                this.getSaturday()
             ).then((completed) => {
 
                 if (completed && completed.length > 0) {
