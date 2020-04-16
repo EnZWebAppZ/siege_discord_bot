@@ -203,10 +203,10 @@ class scheduler_helper {
                 console.log(err);
                 resolve(err);
                 if (msg) {
-                    msg.channel.send('Sorry not able to read sheet! ' + this.me + ' please help!');
+                    msg.channel.send('Sorry not able to read sheet! <@&548897775576678442> please help!');
                 }
                 else {
-                    this.client.channels.get(this.setting.Announcement_Channel_ID).send('Sorry not able to read sheet! ' + this.me + ' please help!');
+                    this.client.channels.get(this.setting.Announcement_Channel_ID).send('Sorry not able to read sheet! <@&548897775576678442> please help!');
                 }
             });
         })
