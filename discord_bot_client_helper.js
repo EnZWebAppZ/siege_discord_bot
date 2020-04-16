@@ -158,7 +158,7 @@ class scheduler_helper {
         var discordCompletedMembers = completed.map((complete) => {
             var filterRes = discordGuildMembers.filter(
                 (member) => {
-                   
+
                     var famName = complete.familyName.trim().toLowerCase();
                     var userName = member && member.user.username ? member.user.username.toString().trim().toLowerCase() : '';
                     var nickName = member && member.nickname ? member.nickname.toString().trim().toLowerCase() : '';
@@ -272,6 +272,9 @@ class scheduler_helper {
 
     get_astray = (msg) => {
         this.getGoogleSheet(msg).then((completed) => {
+
+            console.log(completed);
+
             var discordGuildMembers = this.client.guilds.get(this.setting.guild_Discord_ID).roles.find("id", this.setting.Event_Role_ID).members;
 
             var discordCompletedMembers = this.getDiscordGuildies(discordGuildMembers, completed);
