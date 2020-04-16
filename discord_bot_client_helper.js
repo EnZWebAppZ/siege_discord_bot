@@ -301,8 +301,6 @@ class scheduler_helper {
                         spammer = discordUncompletedMembers.join('\n');
                     }
 
-                    var spamMessage = 'Unfortunately the below list of members have yet to fill RSVP!' + '\n' + spammer;
-                    msg.delete(this.delay);
                     msg.author.send(spamMessage);
                 }
 
@@ -310,8 +308,6 @@ class scheduler_helper {
             else {
                 var spammer = discordUncompletedMembers.join('\n');
 
-                var spamMessage = 'Unfortunately the below list of members have yet to fill RSVP!' + '\n' + spammer;
-                msg.delete(this.delay);
                 msg.author.send(spamMessage);
             }
         })
