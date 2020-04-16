@@ -56,6 +56,27 @@ class scheduler_helper {
     }
 
 
+    getSaturday = () => {
+        var date = new Date();
+        var lastday = date.getDate() - (date.getDay() - 1) + 5;
+        var saturday = new Date(date.setDate(lastday));
+
+        var dd = saturday.getDate();
+        var mm = saturday.getMonth() + 1;
+
+        var yyyy = saturday.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        var saturdayString = dd + '/' + mm + '/' + yyyy;
+        console.log(saturdayString);
+        
+        return 'Siege' + saturdayString;
+    }
+
     writeFile = (obj, path) => {
         let data = JSON.stringify(obj);
         fs.writeFileSync(path, data);
@@ -192,7 +213,7 @@ class scheduler_helper {
             this.readSettings(
                 //this.event_google_sheet
                 'Siege 18/4/2020'
-                ).then((completed) => {
+            ).then((completed) => {
 
                 if (completed && completed.length > 0) {
 
