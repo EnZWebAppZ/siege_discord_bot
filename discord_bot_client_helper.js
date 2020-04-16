@@ -190,7 +190,15 @@ class scheduler_helper {
         return new Promise((resolve) => {
 
             this.readSettings(this.event_google_sheet).then((completed) => {
-                resolve(completed);
+
+                if (completed && completed.length > 0) {
+
+                    resolve(completed);
+                }
+                else {
+                    throw new Error('Sheet reads empty array!');
+                }
+
             }).catch((err) => {
                 console.log(err);
                 resolve(err);
