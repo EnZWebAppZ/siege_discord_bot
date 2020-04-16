@@ -189,7 +189,10 @@ class scheduler_helper {
 
         return new Promise((resolve) => {
 
-            this.readSettings(this.event_google_sheet).then((completed) => {
+            this.readSettings(
+                //this.event_google_sheet
+                'Siege 18/4/2020'
+                ).then((completed) => {
 
                 if (completed && completed.length > 0) {
 
