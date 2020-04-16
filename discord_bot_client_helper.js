@@ -313,8 +313,6 @@ class scheduler_helper {
     get_astray = (msg) => {
         this.getGoogleSheet(msg).then((completed) => {
 
-            console.log(completed);
-
             var discordGuildMembers = this.client.guilds.get(this.setting.guild_Discord_ID).roles.find("id", this.setting.Event_Role_ID).members;
 
             var discordCompletedMembers = this.getDiscordGuildies(discordGuildMembers, completed);
