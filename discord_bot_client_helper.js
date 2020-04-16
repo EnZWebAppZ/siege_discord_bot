@@ -57,26 +57,31 @@ class scheduler_helper {
 
 
     getSaturday = () => {
-        var date = new Date();
-        var lastday = date.getDate() - (date.getDay() - 1) + 5;
-        var saturday = new Date(date.setDate(lastday));
 
-        var dd = saturday.getDate();
-        var mm = saturday.getMonth() + 1;
+        return new Promise((resolve) => {
 
-        var yyyy = saturday.getFullYear();
-        if (dd < 10) {
-            dd = '0' + dd;
-        }
-        if (mm < 10) {
-            mm = '0' + mm;
-        }
-        var saturdayString = dd + '/' + mm + '/' + yyyy;
-        var siegeSheet = 'Siege ' + saturdayString
 
-        console.log(siegeSheet);
+            var date = new Date();
+            var lastday = date.getDate() - (date.getDay() - 1) + 5;
+            var saturday = new Date(date.setDate(lastday));
 
-        return siegeSheet;
+            var dd = saturday.getDate();
+            var mm = saturday.getMonth() + 1;
+
+            var yyyy = saturday.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var saturdayString = dd + '/' + mm + '/' + yyyy;
+            var siegeSheet = 'Siege ' + saturdayString
+
+            console.log(siegeSheet);
+            resolve(siegeSheet);
+        })
+
     }
 
     writeFile = (obj, path) => {
@@ -85,6 +90,7 @@ class scheduler_helper {
     }
 
     readSettings = (work_Sheet) => {
+        console.log('Worksheet is :' + work_Sheet);
         var credentials = atob(creds.json);
 
         let prom = gsjson({
@@ -212,29 +218,34 @@ class scheduler_helper {
 
         return new Promise((resolve) => {
 
-            this.readSettings(
-                //this.event_google_sheet
-                this.getSaturday()
-            ).then((completed) => {
 
-                if (completed && completed.length > 0) {
+            this.getSaturday().then(siegeSheet => {
+                this.readSettings(
+                    //this.event_google_sheet
+                    siegeSheet
+                ).then((completed) => {
 
-                    resolve(completed);
-                }
-                else {
-                    throw new Error('Sheet reads empty array!');
-                }
+                    if (completed && completed.length > 0) {
 
-            }).catch((err) => {
-                console.log(err);
-                resolve(err);
-                if (msg) {
-                    msg.channel.send('Sorry not able to read sheet! <@548897775576678442> or <@223420163880517632> please help!');
-                }
-                else {
-                    this.client.channels.get(this.setting.Announcement_Channel_ID).send('Sorry not able to read sheet! <@548897775576678442> or <@223420163880517632> please help!');
-                }
-            });
+                        resolve(completed);
+                    }
+                    else {
+                        throw new Error('Sheet reads empty array!');
+                    }
+
+                }).catch((err) => {
+                    console.log(err);
+                    resolve(err);
+                    if (msg) {
+                        msg.channel.send('Sorry not able to read sheet! <@548897775576678442> or <@223420163880517632> please help!');
+                    }
+                    else {
+                        this.client.channels.get(this.setting.Announcement_Channel_ID).send('Sorry not able to read sheet! <@548897775576678442> or <@223420163880517632> please help!');
+                    }
+                });
+
+            })
+
         })
     }
 
