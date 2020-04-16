@@ -321,23 +321,62 @@ class scheduler_helper {
                 return '<@' + user.user.id + '>';
             });
 
-            var spammer = discordUncompletedMembers.join('\n');
+
+
+
 
             this.readSettings(this.settings_workSheet).then((ws) => {
                 var workS = ws[0];
-
-                var spamMessage =
-                    control && control == 'warning' ?
-                        'Unfortunately the below list of members have failed to fill up RSVP for the week (' + workS.updated + ')  :(\n' +
-                        spammer + '\nIf you have already filled the form but still see your name here inform ' + this.me :
-                        'Please fill up the document/s prepared on ' + workS.updated + ' for the week!\n' +
-                        workS.g_forms_link + '\n' + spammer + '\nIf you have already filled the document but still see your name here inform ' + this.me;
 
                 if (msg) {
                     msg.delete(1000);
                     msg.channel.send(control && control == 'warning' ? 'Warnings to be issued :\'(' : 'Announcements will be updated shortly :)');
                 }
-                this.client.channels.get(this.setting.Announcement_Channel_ID).send(spamMessage);
+
+
+                if (discordUncompletedMembers.length >= 30) {
+
+                    var first30 = discordUncompletedMembers.splice(0, 30);
+
+                    for (var i = 0; i < 2; i++) {
+                        var spammer;
+                        if (i == 0) {
+                            spammer = first30.join('\n');
+                        }
+                        else {
+                            spammer = discordUncompletedMembers.join('\n');
+                        }
+
+
+                        var spamMessage =
+                            control && control == 'warning' ?
+                                'Unfortunately the below list of members have failed to fill up RSVP for the week (' + workS.updated + ')  :(\n' +
+                                spammer + '\nIf you have already filled the form but still see your name here inform ' + this.me :
+                                'Please fill up the document/s prepared on ' + workS.updated + ' for the week!\n' +
+                                workS.g_forms_link + '\n' + spammer + '\nIf you have already filled the document but still see your name here inform ' + this.me;
+
+                        this.client.channels.get(this.setting.Announcement_Channel_ID).send(spamMessage);
+                    }
+
+                }
+                else {
+
+                    var spammer = discordUncompletedMembers.join('\n');
+
+                    var spamMessage =
+                        control && control == 'warning' ?
+                            'Unfortunately the below list of members have failed to fill up RSVP for the week (' + workS.updated + ')  :(\n' +
+                            spammer + '\nIf you have already filled the form but still see your name here inform ' + this.me :
+                            'Please fill up the document/s prepared on ' + workS.updated + ' for the week!\n' +
+                            workS.g_forms_link + '\n' + spammer + '\nIf you have already filled the document but still see your name here inform ' + this.me;
+
+
+
+                    this.client.channels.get(this.setting.Announcement_Channel_ID).send(spamMessage);
+
+                }
+
+
             })
                 .catch(() => {
 
