@@ -158,6 +158,7 @@ class scheduler_helper {
         var discordCompletedMembers = completed.map((complete) => {
             var filterRes = discordGuildMembers.filter(
                 (member) => {
+                    console.log(complete);
                     var famName = complete.familyName.trim().toLowerCase();
                     var userName = member && member.user.username ? member.user.username.toString().trim().toLowerCase() : '';
                     var nickName = member && member.nickname ? member.nickname.toString().trim().toLowerCase() : '';
@@ -287,12 +288,32 @@ class scheduler_helper {
                 return '<@' + user.user.id + '>';
             });
 
-            var spammer = discordUncompletedMembers.join('\n');
+            if (discordUncompletedMembers.length >= 30) {
 
-            var spamMessage = 'Unfortunately the below list of members have yet to fill RSVP!' + '\n' + spammer;
+                var first30 = discordUncompletedMembers.splice(0, 30);
 
-            msg.delete(this.delay);
-            msg.author.send(spamMessage);
+                for (var i = 0; i < 2; i++) {
+                    var spammer;
+                    if (i == 0) {
+                        spammer = first30.join('\n');
+                    }
+                    else {
+                        spammer = discordUncompletedMembers.join('\n');
+                    }
+
+                    var spamMessage = 'Unfortunately the below list of members have yet to fill RSVP!' + '\n' + spammer;
+                    msg.delete(this.delay);
+                    msg.author.send(spamMessage);
+                }
+
+            }
+            else {
+                var spammer = discordUncompletedMembers.join('\n');
+
+                var spamMessage = 'Unfortunately the below list of members have yet to fill RSVP!' + '\n' + spammer;
+                msg.delete(this.delay);
+                msg.author.send(spamMessage);
+            }
         })
     }
 
