@@ -155,7 +155,6 @@ class scheduler_helper {
 
 
     getDiscordGuildies = (discordGuildMembers, completed) => {
-        console.log(completed[0]);
         var discordCompletedMembers = completed.map((complete) => {
             var filterRes = discordGuildMembers.filter(
                 (member) => {
