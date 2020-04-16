@@ -69,12 +69,7 @@ class scheduler_helper {
             var mm = saturday.getMonth() + 1;
 
             var yyyy = saturday.getFullYear();
-            if (dd < 10) {
-                dd = '0' + dd;
-            }
-            if (mm < 10) {
-                mm = '0' + mm;
-            }
+            
             var saturdayString = dd + '/' + mm + '/' + yyyy;
             var siegeSheet = 'Siege ' + saturdayString
 
