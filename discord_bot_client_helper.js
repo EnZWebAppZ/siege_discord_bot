@@ -72,9 +72,11 @@ class scheduler_helper {
             mm = '0' + mm;
         }
         var saturdayString = dd + '/' + mm + '/' + yyyy;
-        console.log(saturdayString);
+        var siegeSheet = 'Siege ' + saturdayString
 
-        return 'Siege' + saturdayString;
+        console.log(siegeSheet);
+
+        return siegeSheet;
     }
 
     writeFile = (obj, path) => {
