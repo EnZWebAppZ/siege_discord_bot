@@ -155,10 +155,11 @@ class scheduler_helper {
 
 
     getDiscordGuildies = (discordGuildMembers, completed) => {
+        console.log(completed[0]);
         var discordCompletedMembers = completed.map((complete) => {
             var filterRes = discordGuildMembers.filter(
                 (member) => {
-                    console.log(complete);
+                   
                     var famName = complete.familyName.trim().toLowerCase();
                     var userName = member && member.user.username ? member.user.username.toString().trim().toLowerCase() : '';
                     var nickName = member && member.nickname ? member.nickname.toString().trim().toLowerCase() : '';
