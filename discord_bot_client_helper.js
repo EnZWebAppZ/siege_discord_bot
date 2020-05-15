@@ -277,7 +277,7 @@ class scheduler_helper {
             var discordGuildMembers = this.client.guilds.get(this.setting.guild_Discord_ID).roles.find("id", this.setting.Event_Role_ID).members;
 
             var non_attendees = completed.filter((complete) => {
-                var property = Object.keys(complete).filter((key) => key.toLowerCase().startsWith('areyouabletojoinsiegewar'));
+                var property = Object.keys(complete).filter((key) => key.toLowerCase().startsWith('canyouattendtheupcomingconquestwar'));
                 return complete[property] == 'No';
             })
 
