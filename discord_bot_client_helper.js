@@ -69,7 +69,7 @@ class scheduler_helper {
             var mm = saturday.getMonth() + 1;
 
             var yyyy = saturday.getFullYear();
-            
+
             var saturdayString = dd + '/' + mm + '/' + yyyy;
             var siegeSheet = 'Siege ' + saturdayString
 
@@ -162,7 +162,7 @@ class scheduler_helper {
     checkAdminRights = (msg) => {
         return new Promise((resolve) => {
             this.db_helper.permissions_all_rows(this.setting.ID).then((perRows) => {
-
+                console.log(msg);
                 var right = msg.member.roles.some(role =>
                     perRows.some((perRow) => role.name.includes(perRow.Role))
                 );
