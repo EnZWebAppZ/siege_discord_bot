@@ -164,8 +164,7 @@ class scheduler_helper {
             this.db_helper.permissions_all_rows(this.setting.ID).then((perRows) => {
                 if (!msg.member) {
                     console.log('author', msg.author.id);
-
-                    console.log('members', this.client.guilds.get(this.setting.guild_Discord_ID).members.map((mem) => {
+                    console.log('members', this.client.guilds.get(this.setting.guild_Discord_ID).roles.find("id", this.settings.Developer_ID).map((mem) => {
                         return mem.id
                     }));
                     msg.member = this.client.guilds.get(this.setting.guild_Discord_ID).members.find(mem => mem.id == msg.author.id);
