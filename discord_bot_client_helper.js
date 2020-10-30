@@ -102,7 +102,7 @@ class scheduler_helper {
     testMessage = () => {
         this.readSettings(this.settings_workSheet).then(() => {
             console.log(`Test Message Scheduled for : ${this.client.user.tag} on G_ID : ${this.setting.guildID} & E_ID : ${this.setting.ID}`)
-            this.client.channels.get(this.setting.Announcement_Channel_ID).send('TEST MESSAGE');
+            this.client.channels.cache.get(this.setting.Announcement_Channel_ID).send('TEST MESSAGE');
         })
             .catch(() => {
             });
@@ -113,7 +113,7 @@ class scheduler_helper {
         console.log('Send Forms!');
         this.readSettings(this.settings_workSheet).then((ws) => {
             var workS = ws[0];
-            this.client.channels.get(this.setting.Announcement_Channel_ID).send(this.siegeMember + ' Forms for the week have been updated on ' + workS.updated + ', and here they are! \n' + workS.g_forms_link);
+            this.client.channels.cache.get(this.setting.Announcement_Channel_ID).send(this.siegeMember + ' Forms for the week have been updated on ' + workS.updated + ', and here they are! \n' + workS.g_forms_link);
         })
             .catch(() => {
             });
@@ -164,17 +164,17 @@ class scheduler_helper {
             this.db_helper.permissions_all_rows(this.setting.ID).then((perRows) => {
                 if (!msg.member) {
                     console.log('author', msg.author.id);
-                    console.log('members', this.client.guilds.get(this.setting.guild_Discord_ID).roles.find("id", "442657945017253892").members.map((mem) => {
+                    console.log('members', this.client.guilds.cache.get(this.setting.guild_Discord_ID).members.cache.map((mem) => {
                         return mem.id
                     }));
-                    msg.member = this.client.guilds.get(this.setting.guild_Discord_ID).members.find(mem => mem.id == msg.author.id);
+                    msg.member = this.client.guilds.cache.get(this.setting.guild_Discord_ID).members.find(mem => mem.id == msg.author.id);
                 }
-                var right = msg.member.roles.some(role =>
+                var right = msg.member.roles.cache.some(role =>
                     perRows.some((perRow) => role.name.includes(perRow.Role))
                 );
 
                 if (!right) {
-                    msg.delete(1000);
+                    msg.delete({ timeout: 1000 });
                     msg.reply("Sorry you dont have permission to use this :(");
                 }
 
@@ -241,7 +241,7 @@ class scheduler_helper {
                         msg.channel.send('Sorry not able to read sheet! <@548897775576678442> or <@223420163880517632> please help!');
                     }
                     else {
-                        this.client.channels.get(this.setting.Announcement_Channel_ID).send('Sorry not able to read sheet! <@548897775576678442> or <@223420163880517632> please help!');
+                        this.client.channels.cache.get(this.setting.Announcement_Channel_ID).send('Sorry not able to read sheet! <@548897775576678442> or <@223420163880517632> please help!');
                     }
                 });
 
@@ -280,7 +280,7 @@ class scheduler_helper {
     get_non_attendance = (msg) => {
         console.log('Get Non Attendance!');
         this.getGoogleSheet(msg).then((completed) => {
-            var discordGuildMembers = this.client.guilds.get(this.setting.guild_Discord_ID).roles.find("id", this.setting.Event_Role_ID).members;
+            var discordGuildMembers = this.client.guilds.cache.get(this.setting.guild_Discord_ID).roles.cache.find(role => role.id == this.setting.Event_Role_ID).members;
 
             var non_attendees = completed.filter((complete) => {
                 var property = Object.keys(complete).filter((key) => key.toLowerCase().startsWith('canyouattendtheupcomingconquestwar'));
@@ -303,10 +303,10 @@ class scheduler_helper {
                     '\nAny issues please inform ' + this.me;
 
                 if (msg) {
-                    msg.delete(this.delay);
+                    msg.delete({ timeout: this.delay });
                     msg.channel.send('Vacation reminder will be sent shortly :)');
                 }
-                this.client.channels.get(this.setting.Announcement_Channel_ID).send(spamMessage);
+                this.client.channels.cache.get(this.setting.Announcement_Channel_ID).send(spamMessage);
             })
                 .catch(() => {
 
@@ -319,7 +319,7 @@ class scheduler_helper {
     get_astray = (msg) => {
         this.getGoogleSheet(msg).then((completed) => {
 
-            var discordGuildMembers = this.client.guilds.get(this.setting.guild_Discord_ID).roles.find("id", this.setting.Event_Role_ID).members;
+            var discordGuildMembers = this.client.guilds.cache.get(this.setting.guild_Discord_ID).roles.cache.find(role => role.id == this.setting.Event_Role_ID).members;
 
             var discordCompletedMembers = this.getDiscordGuildies(discordGuildMembers, completed);
 
@@ -366,8 +366,9 @@ class scheduler_helper {
 
     get_attendance = (msg, control) => {
         console.log('Get Attendance!');
-        this.getGoogleSheet(msg).then((completed) => {
-            var discordGuildMembers = this.client.guilds.get(this.setting.guild_Discord_ID).roles.find("id", this.setting.Event_Role_ID).members;
+        this.getGoogleSheet(msg).then(async (completed) => {
+
+            var discordGuildMembers = this.client.guilds.cache.get(this.setting.guild_Discord_ID).roles.cache.find(role => role.id == this.setting.Event_Role_ID).members;
 
             var discordCompletedMembers = this.getDiscordGuildies(discordGuildMembers, completed);
 
@@ -395,7 +396,7 @@ class scheduler_helper {
                 var workS = ws[0];
 
                 if (msg) {
-                    msg.delete(1000);
+                    msg.delete({ timeout: 1000 });
                     msg.channel.send(control && control == 'warning' ? 'Warnings to be issued :\'(' : 'Announcements will be updated shortly :)');
                 }
 
@@ -421,7 +422,7 @@ class scheduler_helper {
                                 'Please fill up the document/s prepared on ' + workS.updated + ' for the week!\n' +
                                 workS.g_forms_link + '\n' + spammer + '\nIf you have already filled the document but still see your name here inform ' + this.me;
 
-                        this.client.channels.get(this.setting.Announcement_Channel_ID).send(spamMessage);
+                        this.client.channels.cache.get(this.setting.Announcement_Channel_ID).send(spamMessage);
                     }
 
                 }
@@ -438,7 +439,7 @@ class scheduler_helper {
 
 
 
-                    this.client.channels.get(this.setting.Announcement_Channel_ID).send(spamMessage);
+                    this.client.channels.cache.get(this.setting.Announcement_Channel_ID).send(spamMessage);
 
                 }
 
@@ -452,6 +453,7 @@ class scheduler_helper {
 
     specMessages = (msg) => {
         return new Promise((resolve) => {
+            console.log('send', msg.guild.id, msg.channel.id);
             return this.db_helper.guild_event_first_row({
                 a: msg.guild.id,
                 b: msg.channel.id
@@ -489,25 +491,25 @@ var mainFunct = () => {
         sh.client = dis_client;
 
         if (msg.content === '!best_sea_guild?') {
-            msg.channel.send('The highest leveled player in SEA is in?...');
+            msg.channel.send('DefinitelyNotExile');
         }
 
         if (msg.content === '!worst_sea_guild?') {
-            msg.channel.send('The lowest leveled player in SEA is -   \nnah the ones who lack a spine, even more so than the backbone of a fossilized snail.');
+            msg.channel.send('DefinitelyExile');
         }
 
         if (msg.content === '!best_castle?') {
-            msg.channel.send('The castle of Sycria Underwater Ruins.');
+            msg.channel.send('The one with unlimited BDEs');
         }
 
         if (msg.content === '!complaints') {
-            msg.delete(sh.delay);
+            msg.delete({ timeout: sh.delay });
             msg.channel.send('Don\'t like the RSVP Bot spam?\nhttps://youtu.be/ynMk2EwRi4Q');
         }
 
         if (msg.content === '!tell_time') {
             var datetime = (new Date()).toLocaleString();
-            msg.delete(sh.delay);
+            msg.delete({ timeout: sh.delay });
             msg.channel.send(datetime);
         }
 
@@ -520,7 +522,7 @@ var mainFunct = () => {
                             "\n3)Send Reminder : \n!remind_members" +
                             "\n4)Warn Members : \n!warn_members" +
                             "\n5)Remind Vacationers : \n!send_vacation";
-                        msg.delete(sh.delay);
+                        msg.delete({ timeout: sh.delay });
                         msg.channel.send(guide);
                     }
                 })
@@ -531,7 +533,7 @@ var mainFunct = () => {
         if (msg.content === '!send_announcements') {
             sh.specMessages(msg).then(() => {
                 sh.checkAdminRights(msg).then(() => {
-                    msg.delete(sh.delay);
+                    msg.delete({ timeout: sh.delay });
                     sh.sendForms();
                 })
             })
@@ -568,7 +570,7 @@ var mainFunct = () => {
                     sh.readSettings(sh.settings_workSheet).then((ws) => {
                         msg.author.send("LINK : " + (ws[0] && ws[0].g_forms_link ? ws[0].g_forms_link : '') + "\n" +
                             "Updated : " + (ws[0] && ws[0].updated ? ws[0].updated : ''));
-                        msg.delete(sh.delay);
+                        msg.delete({ timeout: sh.delay });
                     });
                 })
             })

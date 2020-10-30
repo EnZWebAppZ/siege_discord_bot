@@ -7,9 +7,11 @@ const fs = require('fs');
 var gsjson = require('google-spreadsheet-to-json');
 var creds = require('./google-generated-creds.json');
 const db = require('./db_helper');
+const { Client, Intents } = require('discord.js');
+const intents = new Intents([Intents.NON_PRIVILEGED, "GUILD_MEMBERS"])
 
 
-let client = new Discord.Client();
+let client = new Client({ ws: { intents } });
 
 
 var mainFunct = async () => {
