@@ -279,11 +279,14 @@ class scheduler_helper {
 
     get_non_attendance = (msg) => {
         console.log('Get Non Attendance!');
-        this.getGoogleSheet(msg).then((completed) => {
-            var discordGuildMembers = this.client.guilds.cache.get(this.setting.guild_Discord_ID).roles.cache.find(role => role.id == this.setting.Event_Role_ID).members;
+        this.getGoogleSheet(msg).then(async (completed) => {
+
+            var discordGuildMembers = await this.getDiscordMembers();
 
             var non_attendees = completed.filter((complete) => {
-                var property = Object.keys(complete).filter((key) => key.toLowerCase().startsWith('canyouattendtheupcomingconquestwar'));
+                var property = Object.keys(complete).filter((key) =>
+                    key.toLowerCase().indexOf('attend') > 0 && key.toLowerCase().indexOf('conquest') > 0
+                );
                 return complete[property] == 'No';
             })
 
@@ -317,9 +320,9 @@ class scheduler_helper {
 
 
     get_astray = (msg) => {
-        this.getGoogleSheet(msg).then((completed) => {
+        this.getGoogleSheet(msg).then(async (completed) => {
 
-            var discordGuildMembers = this.client.guilds.cache.get(this.setting.guild_Discord_ID).roles.cache.find(role => role.id == this.setting.Event_Role_ID).members;
+            var discordGuildMembers = await this.getDiscordMembers();
 
             var discordCompletedMembers = this.getDiscordGuildies(discordGuildMembers, completed);
 
@@ -368,8 +371,7 @@ class scheduler_helper {
         console.log('Get Attendance!');
         this.getGoogleSheet(msg).then(async (completed) => {
 
-            var discordGuildMembers = this.client.guilds.cache.get(this.setting.guild_Discord_ID).roles.cache.find(role => role.id == this.setting.Event_Role_ID).members;
-
+            var discordGuildMembers = await this.getDiscordMembers();
             var discordCompletedMembers = this.getDiscordGuildies(discordGuildMembers, completed);
 
             var discordUncompletedMembers_raw = discordGuildMembers.filter((member) => {
@@ -474,6 +476,14 @@ class scheduler_helper {
                 })
             })
         })
+    }
+
+
+    getDiscordMembers = async () => {
+        var Role = this.client.guilds.cache.get(this.setting.guild_Discord_ID).roles.cache.find(role => role.id == this.setting.Event_Role_ID);
+
+        var mem = await this.client.guilds.cache.get(this.setting.guild_Discord_ID).members.fetch();
+        return mem.filter((mem) => mem.roles.cache.find(role => role == Role));
     }
 }
 
