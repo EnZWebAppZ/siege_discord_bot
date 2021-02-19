@@ -517,7 +517,7 @@ var mainFunct = () => {
         }
 
         if (msg.content === '!best_castle?') {
-            msg.channel.send('The one with unlimited BDEs');
+            msg.channel.send('All of em are shit');
         }
 
         if (msg.content === '!complaints') {
@@ -550,25 +550,31 @@ var mainFunct = () => {
 
         if (msg.content === '!send_announcements') {
             sh.specMessages(msg).then(() => {
-                sh.checkAdminRights(msg).then(() => {
-                    msg.delete({ timeout: sh.delay });
-                    sh.sendForms();
+                sh.checkAdminRights(msg).then((right) => {
+                    if (right) {
+                        msg.delete({ timeout: sh.delay });
+                        sh.sendForms();
+                    }
                 })
             })
         }
 
         if (msg.content === '!remind_members') {
             sh.specMessages(msg).then(() => {
-                sh.checkAdminRights(msg).then(() => {
-                    sh.get_attendance(msg);
+                sh.checkAdminRights(msg).then((right) => {
+                    if (right) {
+                        sh.get_attendance(msg);
+                    }
                 })
             })
         }
 
         if (msg.content === '!warn_members') {
             sh.specMessages(msg).then(() => {
-                sh.checkAdminRights(msg).then(() => {
-                    sh.get_attendance(msg, 'warning');
+                sh.checkAdminRights(msg).then((right) => {
+                    if (right) {
+                        sh.get_attendance(msg, 'warning');
+                    }
                 })
             })
         }
@@ -576,28 +582,34 @@ var mainFunct = () => {
         if (msg.content === '!send_vacation') {
 
             sh.specMessages(msg).then(() => {
-                sh.checkAdminRights(msg).then(() => {
-                    sh.get_non_attendance(msg);
+                sh.checkAdminRights(msg).then((right) => {
+                    if (right) {
+                        sh.get_non_attendance(msg);
+                    }
                 })
             })
         }
 
         if (msg.content === '!read_settings') {
             sh.specMessages(msg).then(() => {
-                sh.checkAdminRights(msg).then(() => {
-                    sh.readSettings(sh.settings_workSheet).then((ws) => {
-                        msg.author.send("LINK : " + (ws[0] && ws[0].g_forms_link ? ws[0].g_forms_link : '') + "\n" +
-                            "Updated : " + (ws[0] && ws[0].updated ? ws[0].updated : ''));
-                        msg.delete({ timeout: sh.delay });
-                    });
+                sh.checkAdminRights(msg).then((right) => {
+                    if (right) {
+                        sh.readSettings(sh.settings_workSheet).then((ws) => {
+                            msg.author.send("LINK : " + (ws[0] && ws[0].g_forms_link ? ws[0].g_forms_link : '') + "\n" +
+                                "Updated : " + (ws[0] && ws[0].updated ? ws[0].updated : ''));
+                            msg.delete({ timeout: sh.delay });
+                        });
+                    }
                 })
             })
         }
 
         if (msg.content === '!check_attendance') {
             sh.specMessages(msg).then(() => {
-                sh.checkAdminRights(msg).then(() => {
-                    sh.get_astray(msg);
+                sh.checkAdminRights(msg).then((right) => {
+                    if (right) {
+                        sh.get_astray(msg);
+                    }
                 })
             })
         }
