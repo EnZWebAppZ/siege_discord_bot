@@ -189,7 +189,15 @@ class scheduler_helper {
             var filterRes = discordGuildMembers.filter(
                 (member) => {
 
-                    var famName = complete.familyName.trim().toLowerCase();
+                    var famName = "";
+
+                    try {
+                        famName = complete.familyName.trim().toLowerCase();
+                    }
+                    catch {
+                        famName = "NotAProperName";
+                    }
+
                     var userName = member && member.user.username ? member.user.username.toString().trim().toLowerCase() : '';
                     var nickName = member && member.nickname ? member.nickname.toString().trim().toLowerCase() : '';
                     var compare = userName.includes(famName) ||
